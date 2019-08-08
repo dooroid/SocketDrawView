@@ -1,14 +1,23 @@
 package com.skb.duhui.socketdrawview
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
+import android.support.annotation.VisibleForTesting
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private val paintPath: Paint = Paint()
+    private val currentPath: Path = Path()
+
+    private var prevPathBitmap: Bitmap? = null
+    @VisibleForTesting
+    var prevPathCanvas: Canvas? = null
+
+    private var prevX: Float = 0f
+    private var prevY: Float = 0f
 
     var pathColor: Int = Color.GREEN
         set(color) {
@@ -32,4 +41,82 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         paintPath.strokeCap = Paint.Cap.ROUND
     }
 
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        initDraw()
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+
+        canvas!!.drawBitmap(prevPathBitmap!!, 0f, 0f, paintPath)
+        canvas.drawPath(currentPath, paintPath)
+    }
+
+    fun draw(event: MotionEvent) {
+        val x = coordinateX(event.x)
+        val y = coordinateY(event.y)
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                startDraw(x, y)
+                invalidate()
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (isTolerant(x, y)) {
+                    recordDraw(x, y)
+                    invalidate()
+                }
+            }
+            MotionEvent.ACTION_UP -> {
+                commitDraw()
+                invalidate()
+            }
+        }
+    }
+
+    @VisibleForTesting
+    fun coordinateX(x: Float): Float {
+        val location = IntArray(2)
+        getLocationInWindow(location)
+        return x - location[0].toFloat()
+    }
+
+    @VisibleForTesting
+    fun coordinateY(y: Float): Float {
+        val location = IntArray(2)
+        getLocationInWindow(location)
+        return y - location[1].toFloat()
+    }
+
+    @VisibleForTesting
+    fun startDraw(x: Float, y: Float) {
+        currentPath.moveTo(x, y)
+        prevX = x
+        prevY = y
+    }
+
+    @VisibleForTesting
+    fun recordDraw(x: Float, y: Float) {
+        currentPath.quadTo(prevX, prevY, x, y)
+        prevX = x
+        prevY = y
+    }
+
+    @VisibleForTesting
+    fun isTolerant(x: Float, y: Float): Boolean {
+        return Math.abs(x-prevX) >= pathStrokeWidth || Math.abs(y-prevY) >= pathStrokeWidth
+    }
+
+    @VisibleForTesting
+    fun commitDraw() {
+        currentPath.lineTo(prevX, prevY)
+        prevPathCanvas!!.drawPath(currentPath, paintPath)
+        currentPath.reset()
+    }
+
+    private fun initDraw() {
+        prevPathBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        prevPathCanvas = Canvas(prevPathBitmap!!)
+    }
 }

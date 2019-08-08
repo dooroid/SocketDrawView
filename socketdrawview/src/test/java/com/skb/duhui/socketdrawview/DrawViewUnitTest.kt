@@ -1,34 +1,101 @@
 package com.skb.duhui.socketdrawview
 
 import android.content.Context
+import android.graphics.Canvas
 import android.util.AttributeSet
 import org.junit.Before
-import org.mockito.Mock
 import android.graphics.Color
-import android.graphics.Paint
+import android.view.MotionEvent
 import org.junit.Test
-import org.mockito.MockitoAnnotations
-
+import org.mockito.*
+import org.mockito.Mockito.*
 
 
 class DrawViewUnitTest {
 
+    @InjectMocks
+    lateinit var drawView: DrawView
     @Mock
-    private val context: Context? = null
+    lateinit var context: Context
     @Mock
-    private val attrs: AttributeSet? = null
-
-    private lateinit var drawView: DrawView
+    lateinit var attrs: AttributeSet
 
     @Before
     fun createDrawView() {
         MockitoAnnotations.initMocks(this)
-        drawView = DrawView(context!!, attrs!!)
     }
 
     @Test
     fun initVariables() {
         assert(drawView.pathColor == Color.GREEN)
         assert(drawView.pathStrokeWidth == 12f)
+    }
+
+    @Test
+    fun draw() {
+        val mockEvent: MotionEvent = mock(MotionEvent::class.java)
+        val spyDrawView = spy(drawView)
+
+        spyDrawView.draw(mockEvent)
+
+        verify(spyDrawView, times(1)).coordinateX(mockEvent.x)
+        verify(spyDrawView, times(1)).coordinateY(mockEvent.y)
+    }
+
+    @Test
+    fun drawActionDown() {
+        val mockEvent: MotionEvent = mock(MotionEvent::class.java)
+        val spyDrawView = spy(drawView)
+
+        Mockito.`when`(mockEvent.action).thenReturn(MotionEvent.ACTION_DOWN)
+        spyDrawView.draw(mockEvent)
+
+        verify(spyDrawView, times(1))
+            .startDraw(ArgumentMatchers.anyFloat(), ArgumentMatchers.anyFloat())
+        verify(spyDrawView, times(1)).invalidate()
+    }
+
+    @Test
+    fun drawActionMove_tolerant() {
+        val mockEvent: MotionEvent = mock(MotionEvent::class.java)
+        val spyDrawView = spy(drawView)
+
+        Mockito.`when`(mockEvent.action).thenReturn(MotionEvent.ACTION_MOVE)
+        Mockito.`when`(spyDrawView.isTolerant(ArgumentMatchers.anyFloat(), ArgumentMatchers.anyFloat()))
+            .thenReturn(true)
+        spyDrawView.draw(mockEvent)
+
+        verify(spyDrawView, times(1))
+            .recordDraw(ArgumentMatchers.anyFloat(), ArgumentMatchers.anyFloat())
+        verify(spyDrawView, times(1)).invalidate()
+    }
+
+    @Test
+    fun drawActionMove_notTolerant() {
+        val mockEvent: MotionEvent = mock(MotionEvent::class.java)
+        val spyDrawView = spy(drawView)
+
+        Mockito.`when`(mockEvent.action).thenReturn(MotionEvent.ACTION_MOVE)
+        Mockito.`when`(spyDrawView.isTolerant(ArgumentMatchers.anyFloat(), ArgumentMatchers.anyFloat()))
+            .thenReturn(false)
+        spyDrawView.draw(mockEvent)
+
+        verify(spyDrawView, times(0))
+            .recordDraw(ArgumentMatchers.anyFloat(), ArgumentMatchers.anyFloat())
+        verify(spyDrawView, times(0)).invalidate()
+    }
+
+    @Test
+    fun drawActionUp() {
+        val mockEvent: MotionEvent = mock(MotionEvent::class.java)
+        val spyDrawView = spy(drawView)
+
+        Mockito.`when`(mockEvent.action).thenReturn(MotionEvent.ACTION_UP)
+        spyDrawView.prevPathCanvas = mock(Canvas::class.java)
+        spyDrawView.draw(mockEvent)
+
+        verify(spyDrawView, times(1))
+            .commitDraw()
+        verify(spyDrawView, times(1)).invalidate()
     }
 }
