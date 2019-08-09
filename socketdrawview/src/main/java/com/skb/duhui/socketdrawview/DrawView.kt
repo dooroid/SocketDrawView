@@ -6,12 +6,14 @@ import android.support.annotation.VisibleForTesting
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import java.util.*
 
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private val paintPath: Paint = Paint()
     private val currentPath: Path = Path()
 
+    private val prevPathStack: Stack<Bitmap> = Stack()
     private var prevPathBitmap: Bitmap? = null
     @VisibleForTesting
     var prevPathCanvas: Canvas? = null
@@ -41,8 +43,8 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         paintPath.strokeCap = Paint.Cap.ROUND
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
         initDraw()
     }
 
@@ -74,6 +76,21 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             }
         }
     }
+
+    fun cancel() {
+        if (prevPathStack.isEmpty()) {
+            initDraw()
+        } else {
+            prevPathBitmap = prevPathStack.pop()
+        }
+        invalidate()
+    }
+
+    fun erase() {
+        initDraw()
+        invalidate()
+    }
+
 
     @VisibleForTesting
     fun coordinateX(x: Float): Float {
@@ -111,6 +128,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     @VisibleForTesting
     fun commitDraw() {
         currentPath.lineTo(prevX, prevY)
+        prevPathStack.add(Bitmap.createBitmap(prevPathBitmap!!))
         prevPathCanvas!!.drawPath(currentPath, paintPath)
         currentPath.reset()
     }
