@@ -13,8 +13,10 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val paintPath: Paint = Paint()
     private val currentPath: Path = Path()
 
-    private val prevPathStack: Stack<Bitmap> = Stack()
-    private var prevPathBitmap: Bitmap? = null
+    @VisibleForTesting
+    val prevPathStack: Stack<Bitmap> = Stack()
+    @VisibleForTesting
+    var prevPathBitmap: Bitmap? = null
     @VisibleForTesting
     var prevPathCanvas: Canvas? = null
 

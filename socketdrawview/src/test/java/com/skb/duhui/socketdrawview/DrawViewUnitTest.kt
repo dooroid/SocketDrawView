@@ -1,6 +1,7 @@
 package com.skb.duhui.socketdrawview
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.util.AttributeSet
 import org.junit.Before
@@ -92,10 +93,43 @@ class DrawViewUnitTest {
 
         Mockito.`when`(mockEvent.action).thenReturn(MotionEvent.ACTION_UP)
         spyDrawView.prevPathCanvas = mock(Canvas::class.java)
+        spyDrawView.prevPathBitmap = mock(Bitmap::class.java)
         spyDrawView.draw(mockEvent)
 
         verify(spyDrawView, times(1))
             .commitDraw()
         verify(spyDrawView, times(1)).invalidate()
+    }
+
+    @Test
+    fun commit_checkStackSize() {
+        drawView.prevPathCanvas = mock(Canvas::class.java)
+        drawView.prevPathBitmap = mock(Bitmap::class.java)
+        drawView.commitDraw()
+        drawView.commitDraw()
+        drawView.commitDraw()
+        drawView.commitDraw()
+        drawView.commitDraw()
+        drawView.commitDraw()
+        drawView.commitDraw()
+        assert(drawView.prevPathStack.size == 7)
+    }
+
+    @Test
+    fun cancel_checkStackSize() {
+        drawView.prevPathStack.add(mock(Bitmap::class.java))
+        drawView.prevPathStack.add(mock(Bitmap::class.java))
+        drawView.prevPathStack.add(mock(Bitmap::class.java))
+        drawView.prevPathStack.add(mock(Bitmap::class.java))
+        drawView.prevPathStack.add(mock(Bitmap::class.java))
+        drawView.prevPathStack.add(mock(Bitmap::class.java))
+        drawView.prevPathStack.add(mock(Bitmap::class.java))
+        drawView.prevPathStack.add(mock(Bitmap::class.java))
+
+        drawView.cancel()
+        drawView.cancel()
+        drawView.cancel()
+
+        assert(drawView.prevPathStack.size == 5)
     }
 }
