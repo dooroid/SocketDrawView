@@ -42,44 +42,54 @@
                     android:layout_height="wrap_content"
                     android:text="RED"/>
 
-            <SeekBar android:layout_width="match_parent"
+            <SeekBar android:id="@+id/red_bar"
+                     android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:layout_marginBottom="8dp"/>
+                     android:layout_marginBottom="8dp"
+                     android:max="255"/>
 
             <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="GREEN"/>
 
-            <SeekBar android:layout_width="match_parent"
+            <SeekBar android:id="@+id/green_bar"
+                     android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:layout_marginBottom="8dp"/>
+                     android:layout_marginBottom="8dp"
+                     android:max="255"/>
 
             <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="BLUE"/>
 
-            <SeekBar android:layout_width="match_parent"
+            <SeekBar android:id="@+id/blue_bar"
+                     android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:layout_marginBottom="8dp"/>
+                     android:layout_marginBottom="8dp"
+                     android:max="255"/>
 
             <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ALPHA"/>
 
-            <SeekBar android:layout_width="match_parent"
+            <SeekBar android:id="@+id/alpha_bar"
+                     android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:layout_marginBottom="8dp"/>
+                     android:layout_marginBottom="8dp"
+                     android:max="255"/>
 
             <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="STROKE WIDTH"/>
 
-            <SeekBar android:layout_width="match_parent"
-                     android:layout_height="wrap_content"/>
+            <SeekBar android:id="@+id/width_bar"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:max="100"/>
 
         </LinearLayout>
 
