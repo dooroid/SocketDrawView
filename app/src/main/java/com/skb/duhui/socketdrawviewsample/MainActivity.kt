@@ -1,5 +1,6 @@
 package com.skb.duhui.socketdrawviewsample
 
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
@@ -17,8 +18,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var redBar: SeekBar
     lateinit var greenBar: SeekBar
     lateinit var blueBar: SeekBar
-    lateinit var alphaBar: SeekBar
     lateinit var widthBar: SeekBar
+
+    var red = 0
+    var green = 0
+    var blue = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,17 +36,21 @@ class MainActivity : AppCompatActivity() {
         redBar = findViewById(R.id.red_bar)
         greenBar = findViewById(R.id.green_bar)
         blueBar = findViewById(R.id.blue_bar)
-        alphaBar = findViewById(R.id.alpha_bar)
         widthBar = findViewById(R.id.width_bar)
 
         cancelButton.setOnClickListener { drawView.cancel() }
         eraseButton.setOnClickListener { drawView.erase() }
 
-        widthBar.progress = drawView.pathStrokeWidth.toInt()
-        widthBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        val defaultColor = drawView.pathColor
+        red = defaultColor shr 16 and 0xff
+        green = defaultColor shr 8 and 0xff
+        blue = defaultColor and 0xff
+
+        redBar.progress = red
+        redBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-                drawView.pathStrokeWidth = i.toFloat()
+                // onProgress
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -50,7 +58,58 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                // onStop
+                red = seekBar.progress
+                setPathColor()
+            }
+        })
+
+        greenBar.progress = green
+        greenBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+
+            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+                // onProgress
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                // onStart
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                green = seekBar.progress
+                setPathColor()
+            }
+        })
+
+        blueBar.progress = blue
+        blueBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+
+            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+                // onProgress
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                // onStart
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                blue = seekBar.progress
+                setPathColor()
+            }
+        })
+
+        widthBar.progress = drawView.pathStrokeWidth.toInt()
+        widthBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+
+            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+                // onProgress
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                // onStart
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                drawView.pathStrokeWidth = seekBar.progress.toFloat()
             }
         })
     }
@@ -58,5 +117,9 @@ class MainActivity : AppCompatActivity() {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         drawView.draw(event!!)
         return super.onTouchEvent(event)
+    }
+
+    private fun setPathColor() {
+        drawView.pathColor = Color.rgb(red, green, blue)
     }
 }

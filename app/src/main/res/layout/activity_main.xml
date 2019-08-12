@@ -45,7 +45,7 @@
             <SeekBar android:id="@+id/red_bar"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:layout_marginBottom="8dp"
+                     android:layout_marginBottom="4dp"
                      android:max="255"/>
 
             <android.support.v7.widget.AppCompatTextView
@@ -56,7 +56,7 @@
             <SeekBar android:id="@+id/green_bar"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:layout_marginBottom="8dp"
+                     android:layout_marginBottom="4dp"
                      android:max="255"/>
 
             <android.support.v7.widget.AppCompatTextView
@@ -67,18 +67,7 @@
             <SeekBar android:id="@+id/blue_bar"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:layout_marginBottom="8dp"
-                     android:max="255"/>
-
-            <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ALPHA"/>
-
-            <SeekBar android:id="@+id/alpha_bar"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:layout_marginBottom="8dp"
+                     android:layout_marginBottom="4dp"
                      android:max="255"/>
 
             <android.support.v7.widget.AppCompatTextView
@@ -105,19 +94,19 @@
             <Button
                     android:id="@+id/cancel_button"
                     android:layout_width="100dp"
-                    android:layout_height="80dp"
+                    android:layout_height="60dp"
                     android:text="cancel"/>
 
             <Button
                     android:id="@+id/erase_button"
                     android:layout_width="100dp"
-                    android:layout_height="80dp"
+                    android:layout_height="60dp"
                     android:text="erase"/>
 
             <Button
                     android:id="@+id/mode_button"
                     android:layout_width="100dp"
-                    android:layout_height="80dp"
+                    android:layout_height="60dp"
                     android:text="mode"/>
 
         </LinearLayout>
