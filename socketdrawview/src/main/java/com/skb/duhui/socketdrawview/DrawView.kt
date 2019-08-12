@@ -35,6 +35,9 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             paintPath.strokeWidth = field
         }
 
+    var isDisabled: Boolean = false
+    var isPath: Boolean = true
+
     init {
         paintPath.isAntiAlias = true
         paintPath.isDither = true
@@ -53,13 +56,27 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        canvas!!.drawBitmap(prevPathBitmap!!, 0f, 0f, paintPath)
-        canvas.drawPath(currentPath, paintPath)
+        if (isDisabled) {
+            return
+        }
+
+        if (isPath) {
+            canvas!!.drawBitmap(prevPathBitmap!!, 0f, 0f, paintPath)
+            canvas.drawPath(currentPath, paintPath)
+        } else {
+            canvas!!.drawCircle(prevX, prevY, 40f, paintPath)
+        }
     }
 
     fun draw(event: MotionEvent) {
         val x = coordinateX(event.x)
         val y = coordinateY(event.y)
+
+        if (!isPath) {
+            updateCoordinates(x, y)
+            invalidate()
+            return
+        }
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -112,13 +129,16 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     @VisibleForTesting
     fun startDraw(x: Float, y: Float) {
         currentPath.moveTo(x, y)
-        prevX = x
-        prevY = y
+        updateCoordinates(x, y)
     }
 
     @VisibleForTesting
     fun recordDraw(x: Float, y: Float) {
         currentPath.quadTo(prevX, prevY, x, y)
+        updateCoordinates(x, y)
+    }
+
+    private fun updateCoordinates(x: Float, y: Float) {
         prevX = x
         prevY = y
     }

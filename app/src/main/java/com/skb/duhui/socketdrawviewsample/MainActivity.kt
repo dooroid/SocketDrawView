@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity() {
 
         cancelButton.setOnClickListener { drawView.cancel() }
         eraseButton.setOnClickListener { drawView.erase() }
+        modeButton.setOnClickListener {
+            drawView.isPath = !drawView.isPath
+        }
 
         val defaultColor = drawView.pathColor
         red = defaultColor shr 16 and 0xff
