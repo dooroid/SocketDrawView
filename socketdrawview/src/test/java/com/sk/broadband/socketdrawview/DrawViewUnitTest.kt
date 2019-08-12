@@ -126,9 +126,9 @@ class DrawViewUnitTest {
         drawView.prevPathStack.add(mock(Bitmap::class.java))
         drawView.prevPathStack.add(mock(Bitmap::class.java))
 
-        drawView.cancel()
-        drawView.cancel()
-        drawView.cancel()
+        drawView.undoPrev()
+        drawView.undoPrev()
+        drawView.undoPrev()
 
         assert(drawView.prevPathStack.size == 5)
     }

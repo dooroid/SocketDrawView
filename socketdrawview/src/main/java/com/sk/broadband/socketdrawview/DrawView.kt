@@ -69,23 +69,23 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     fun draw(event: MotionEvent) {
-        val x = coordinateX(event.x)
-        val y = coordinateY(event.y)
+        val curX = coordinateX(event.x)
+        val curY = coordinateY(event.y)
 
         if (!isPath) {
-            updateCoordinates(x, y)
+            updateCoordinates(curX, curY)
             invalidate()
             return
         }
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                startDraw(x, y)
+                startDraw(curX, curY)
                 invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
-                if (isTolerant(x, y)) {
-                    recordDraw(x, y)
+                if (isTolerant(curX, curY)) {
+                    recordDraw(curX, curY)
                     invalidate()
                 }
             }
@@ -96,7 +96,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         }
     }
 
-    fun cancel() {
+    fun undoPrev() {
         if (prevPathStack.isEmpty()) {
             initDraw()
         } else {
@@ -106,46 +106,46 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         invalidate()
     }
 
-    fun erase() {
+    fun eraseAll() {
         initDraw()
         invalidate()
     }
 
 
     @VisibleForTesting
-    fun coordinateX(x: Float): Float {
+    fun coordinateX(curX: Float): Float {
         val location = IntArray(2)
         getLocationInWindow(location)
-        return x - location[0].toFloat()
+        return curX - location[0].toFloat()
     }
 
     @VisibleForTesting
-    fun coordinateY(y: Float): Float {
+    fun coordinateY(curY: Float): Float {
         val location = IntArray(2)
         getLocationInWindow(location)
-        return y - location[1].toFloat()
+        return curY - location[1].toFloat()
     }
 
     @VisibleForTesting
-    fun startDraw(x: Float, y: Float) {
-        currentPath.moveTo(x, y)
-        updateCoordinates(x, y)
+    fun startDraw(curX: Float, curY: Float) {
+        currentPath.moveTo(curX, curY)
+        updateCoordinates(curX, curY)
     }
 
     @VisibleForTesting
-    fun recordDraw(x: Float, y: Float) {
-        currentPath.quadTo(prevX, prevY, x, y)
-        updateCoordinates(x, y)
+    fun recordDraw(curX: Float, curY: Float) {
+        currentPath.quadTo(prevX, prevY, curX, curY)
+        updateCoordinates(curX, curY)
     }
 
-    private fun updateCoordinates(x: Float, y: Float) {
-        prevX = x
-        prevY = y
+    private fun updateCoordinates(curX: Float, curY: Float) {
+        prevX = curX
+        prevY = curY
     }
 
     @VisibleForTesting
-    fun isTolerant(x: Float, y: Float): Boolean {
-        return Math.abs(x-prevX) >= pathStrokeWidth || Math.abs(y-prevY) >= pathStrokeWidth
+    fun isTolerant(curX: Float, curY: Float): Boolean {
+        return Math.abs(curX-prevX) >= pathStrokeWidth || Math.abs(curY-prevY) >= pathStrokeWidth
     }
 
     @VisibleForTesting

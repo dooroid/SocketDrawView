@@ -38,8 +38,8 @@ class MainActivity : AppCompatActivity() {
         blueBar = findViewById(R.id.blue_bar)
         widthBar = findViewById(R.id.width_bar)
 
-        cancelButton.setOnClickListener { drawView.cancel() }
-        eraseButton.setOnClickListener { drawView.erase() }
+        cancelButton.setOnClickListener { drawView.undoPrev() }
+        eraseButton.setOnClickListener { drawView.eraseAll() }
         modeButton.setOnClickListener {
             drawView.isPath = !drawView.isPath
         }
