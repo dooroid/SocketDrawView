@@ -1,4 +1,4 @@
-package com.skb.duhui.socketdrawviewsample
+package com.sk.broadband.socketdrawviewsample
 
 import org.junit.Test
 

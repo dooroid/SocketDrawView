@@ -1,4 +1,4 @@
-package com.skb.duhui.socketdrawview;
+package com.sk.broadband.socketdrawview;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

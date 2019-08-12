@@ -1,4 +1,4 @@
-package com.skb.duhui.socketdrawviewsample
+package com.sk.broadband.socketdrawviewsample
 
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.SeekBar
-import com.skb.duhui.socketdrawview.DrawView
+import com.sk.broadband.socketdrawview.DrawView
 
 class MainActivity : AppCompatActivity() {
 

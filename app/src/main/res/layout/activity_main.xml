@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.skb.duhui.socketdrawview.DrawView
+    <com.sk.broadband.socketdrawview.DrawView
             android:id="@+id/draw_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
