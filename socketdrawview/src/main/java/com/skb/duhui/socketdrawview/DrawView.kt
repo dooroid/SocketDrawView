@@ -84,6 +84,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             initDraw()
         } else {
             prevPathBitmap = prevPathStack.pop()
+            prevPathCanvas = Canvas(prevPathBitmap!!)
         }
         invalidate()
     }
