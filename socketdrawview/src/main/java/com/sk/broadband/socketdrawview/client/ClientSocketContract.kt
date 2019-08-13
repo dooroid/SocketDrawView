@@ -1,5 +1,6 @@
 package com.sk.broadband.socketdrawview.client
 
+import android.view.MotionEvent
 import com.sk.broadband.socketdrawview.DrawContract
 
 interface ClientSocketContract {
@@ -9,6 +10,6 @@ interface ClientSocketContract {
 
         fun disconnectClient()
 
-        fun writeBuffer(data: ByteArray)
+        fun drawServer(event: MotionEvent)
     }
 }
