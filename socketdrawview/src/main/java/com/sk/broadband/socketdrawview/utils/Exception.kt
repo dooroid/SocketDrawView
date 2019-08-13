@@ -1,4 +1,4 @@
-package com.sk.broadband.socketdrawview
+package com.sk.broadband.socketdrawview.utils
 
 object Exception {
     fun SystemCanvasNullException() {

@@ -6,9 +6,12 @@ import android.support.annotation.VisibleForTesting
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.sk.broadband.socketdrawview.utils.Exception
 import java.util.*
 
-class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+
+open class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs),
+    DrawContract.View {
 
     private val paintPath: Paint = Paint()
     private val currentPath: Path = Path()
@@ -23,20 +26,20 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var prevX: Float = 0f
     private var prevY: Float = 0f
 
-    var pathColor: Int = Color.GREEN
+    override var pathColor: Int = Color.GREEN
         set(color) {
             field = color
             paintPath.color = field
         }
 
-    var pathStrokeWidth: Float = 12f
+    override var pathStrokeWidth: Float = 12f
         set(strokeWidth) {
             field = strokeWidth
             paintPath.strokeWidth = field
         }
 
-    var isDisabled: Boolean = false
-    var isPath: Boolean = true
+    override var isDisabled: Boolean = false
+    override var isPath: Boolean = true
 
     init {
         paintPath.isAntiAlias = true
@@ -68,7 +71,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         }
     }
 
-    fun draw(event: MotionEvent) {
+    override fun draw(event: MotionEvent) {
         val curX = coordinateX(event.x)
         val curY = coordinateY(event.y)
 
@@ -96,7 +99,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         }
     }
 
-    fun undoPrev() {
+    override fun undoPrev() {
         if (prevPathStack.isEmpty()) {
             initDraw()
         } else {
@@ -106,7 +109,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         invalidate()
     }
 
-    fun eraseAll() {
+    override fun eraseAll() {
         initDraw()
         invalidate()
     }
