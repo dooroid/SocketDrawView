@@ -28,7 +28,7 @@ class ServerSocketDrawView(context: Context, attrs: AttributeSet) : DrawView(con
             bindServerSocket()
             acceptSocket()
             while (socket.isConnected) {
-                draw(readBuffer())
+                reflectOnScreen(readBuffer())
             }
         }
     }
@@ -58,13 +58,28 @@ class ServerSocketDrawView(context: Context, attrs: AttributeSet) : DrawView(con
         return buffer
     }
 
-    private fun draw(data: ByteArray) {
+    private fun reflectOnScreen(data: ByteArray) {
+        val mode = data[0].toInt()
+
+        when (mode) {
+            0 -> { isPath = false }
+            1 -> { isPath = true }
+            2 -> {
+                undoPrev()
+                return
+            }
+            3 -> {
+                eraseAll()
+                return
+            }
+        }
+
         draw(transfromRawData(data))
     }
 
 //    (Mode) 1Byte, (Action) 4Byte, (X coordinate) 4Byte, (Y coordinate) 4Byte, (Color) 4Byte, (Stroke Width) 4Byte
     private fun transfromRawData(data: ByteArray): DrawContract.View.TouchInfo {
-        isPath = (data[0].toInt() == 1)
+
         pathColor = toNumber(13, data)
         pathStrokeWidth = toNumber(17, data).toFloat()
 

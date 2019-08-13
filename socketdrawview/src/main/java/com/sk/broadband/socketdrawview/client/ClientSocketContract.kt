@@ -2,7 +2,6 @@ package com.sk.broadband.socketdrawview.client
 
 import android.view.MotionEvent
 import com.sk.broadband.socketdrawview.DrawContract
-import java.lang.Exception
 
 interface ClientSocketContract {
     interface View : DrawContract.View {
@@ -12,5 +11,9 @@ interface ClientSocketContract {
         fun disconnectClient()
 
         fun drawServer(event: MotionEvent)
+
+        fun undoPrevServer()
+
+        fun eraseAllServer()
     }
 }

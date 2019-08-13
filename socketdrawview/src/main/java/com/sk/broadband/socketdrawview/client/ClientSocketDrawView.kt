@@ -49,17 +49,35 @@ class ClientSocketDrawView(context: Context, attrs: AttributeSet) : DrawView(con
     }
 
     override fun drawServer(event: MotionEvent) {
+        sendServer(toByteArray(event))
+    }
+
+    override fun undoPrevServer() {
+        val data = ByteArray(21)
+        data[0] = 2
+        sendServer(data)
+    }
+
+    override fun eraseAllServer() {
+        val data = ByteArray(21)
+        data[0] = 3
+        sendServer(data)
+    }
+
+    private fun sendServer(data: ByteArray) {
         if (!socket.isConnected) {
-            connectSocket(ipAddress, port)
+            Log.d("ERROR", "Socket is not Connected")
+            return
         }
 
         GlobalScope.launch(Dispatchers.Default) {
             val outputStream = socket.getOutputStream()
-            outputStream.write(toByteArray(event))
+            outputStream.write(data)
         }
     }
 
-//    (Mode) 1Byte, (Action) 4Byte, (X coordinate) 4Byte, (Y coordinate) 4Byte, (Color) 4Byte, (Stroke Width) 4Byte
+
+    //    (Mode) 1Byte, (Action) 4Byte, (X coordinate) 4Byte, (Y coordinate) 4Byte, (Color) 4Byte, (Stroke Width) 4Byte
     fun toByteArray(event: MotionEvent?): ByteArray {
         val eventByteArray = ByteArray(21)
 

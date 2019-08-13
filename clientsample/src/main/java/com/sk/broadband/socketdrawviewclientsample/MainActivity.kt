@@ -42,8 +42,14 @@ class MainActivity : AppCompatActivity() {
         blueBar = findViewById(R.id.blue_bar)
         widthBar = findViewById(R.id.width_bar)
 
-        cancelButton.setOnClickListener { clientSocketDrawView.undoPrev() }
-        eraseButton.setOnClickListener { clientSocketDrawView.eraseAll() }
+        cancelButton.setOnClickListener {
+            clientSocketDrawView.undoPrev()
+            clientSocketDrawView.undoPrevServer()
+        }
+        eraseButton.setOnClickListener {
+            clientSocketDrawView.eraseAll()
+            clientSocketDrawView.eraseAllServer()
+        }
         modeButton.setOnClickListener {
             clientSocketDrawView.isPath = !clientSocketDrawView.isPath
         }
