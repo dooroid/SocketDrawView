@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.SeekBar
+import android.widget.Toast
 import com.sk.broadband.socketdrawview.client.ClientSocketDrawView
 
 
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     var red = 0
     var green = 0
     var blue = 0
+
+    lateinit var ipAddress: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,6 +119,24 @@ class MainActivity : AppCompatActivity() {
                 clientSocketDrawView.pathStrokeWidth = seekBar.progress.toFloat()
             }
         })
+
+
+        if (intent.hasExtra("IP_ADDRESS")) {
+            ipAddress = intent.getStringExtra("IP_ADDRESS")
+            Toast.makeText(this, ipAddress, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "전달된 IP가 없습니다", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        clientSocketDrawView.connectSocket(ipAddress, 3000)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        clientSocketDrawView.disconnectClient()
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
