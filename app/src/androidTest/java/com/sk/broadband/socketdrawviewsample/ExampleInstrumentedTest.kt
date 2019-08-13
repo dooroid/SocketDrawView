@@ -1,4 +1,4 @@
-package com.skb.duhui.socketdrawviewsample
+package com.sk.broadband.socketdrawviewsample
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
