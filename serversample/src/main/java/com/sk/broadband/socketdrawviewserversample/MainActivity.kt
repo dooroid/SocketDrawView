@@ -17,8 +17,13 @@ class MainActivity : AppCompatActivity() {
         serverSocketDrawView = findViewById(R.id.draw_view)
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        serverSocketDrawView.draw(event!!)
-        return super.onTouchEvent(event)
+    override fun onResume() {
+        super.onResume()
+        serverSocketDrawView.createServerSocket()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        serverSocketDrawView.disconnectServer()
     }
 }
