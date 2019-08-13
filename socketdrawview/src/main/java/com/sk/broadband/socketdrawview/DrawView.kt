@@ -61,10 +61,10 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         }
 
         if (isPath) {
-            canvas!!.drawBitmap(prevPathBitmap!!, 0f, 0f, paintPath)
-            canvas.drawPath(currentPath, paintPath)
+            canvas?.drawBitmap(prevPathBitmap!!, 0f, 0f, paintPath) ?: Exception.SystemCanvasNullException()
+            canvas?.drawPath(currentPath, paintPath) ?: Exception.SystemCanvasNullException()
         } else {
-            canvas!!.drawCircle(prevX, prevY, 40f, paintPath)
+            canvas?.drawCircle(prevX, prevY, 40f, paintPath) ?: Exception.SystemCanvasNullException()
         }
     }
 
@@ -152,7 +152,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     fun commitDraw() {
         currentPath.lineTo(prevX, prevY)
         prevPathStack.add(Bitmap.createBitmap(prevPathBitmap!!))
-        prevPathCanvas!!.drawPath(currentPath, paintPath)
+        prevPathCanvas?.drawPath(currentPath, paintPath) ?: Exception.TemporaryCanvasNullException()
         currentPath.reset()
     }
 
