@@ -9,6 +9,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/clientsample" />
+            <option value="$PROJECT_DIR$/serversample" />
             <option value="$PROJECT_DIR$/socketdrawview" />
           </set>
         </option>
