@@ -1,9 +1,7 @@
-<p align="center"><img src="http://i67.tinypic.com/2ij1d2r.jpg"></p>
+<p align="center"><img src="http://i65.tinypic.com/kq0hv.png"></p>
 
 SocketDrawView
 =================
-
-<!--<img src="/preview/preview.gif" alt="sample" title="sample" width="300" height="435" align="right" vspace="52" />-->
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
@@ -13,6 +11,8 @@ SocketDrawView
 [![Twitter](https://img.shields.io/badge/Twitter-@LopezMikhael-blue.svg?style=flat)](http://twitter.com/lopezmikhael)
 
 This is an Android project allowing to use Socket, DrawView in the simplest way possible.
+
+<img src="https://gph.is/g/Z2V1ql5" alt="sample" title="sample" align="center" />
 
 USAGE
 -----
@@ -70,6 +70,14 @@ XML
 KOTLIN
 -----
 
+#### Draw Usage:
+```kotlin
+override fun onTouchEvent(event: MotionEvent?): Boolean {
+    drawView.draw(event!!)
+    return super.onTouchEvent(event)
+}
+```
+
 #### Draw Methods:
 ```kotlin
 val drawView = findViewById<DrawView>(R.id.draw_view)
@@ -81,14 +89,6 @@ drawView.pathStrokeWidth = seekBar.progress.toFloat()
 drawView.isPath = !drawView.isPath
 drawView.undoPrev()
 drawView.eraseAll()
-```
-
-#### Draw Usage:
-```kotlin
-override fun onTouchEvent(event: MotionEvent?): Boolean {
-    drawView.draw(event!!)
-    return super.onTouchEvent(event)
-}
 ```
 
 #### Client Socket Usage:
@@ -110,6 +110,18 @@ override fun onTouchEvent(event: MotionEvent?): Boolean {
 }
 ```
 
+#### Client Methods:
+```kotlin
+clientSocketDrawView = findViewById<ClientSocketDrawView>(R.id.draw_view)
+clientSocketDrawView.undoPrevServer()
+clientSocketDrawView.eraseAllServer()
+clientSocketDrawView.onClosedListener
+clientSocketDrawView.onIOExceptionListener
+clientSocketDrawView.onSocketTimeoutExceptionListener
+clientSocketDrawView.onIllegalBlockingModeExceptionListener
+clientSocketDrawView.onIllegalArgumentExceptionListener
+```
+
 #### Server Socket Usage:
 ```kotlin
 override fun onResume() {
@@ -121,6 +133,13 @@ override fun onPause() {
     super.onPause()
     serverSocketDrawView.disconnectServer()
 }
+```
+
+#### Server Methods:
+```kotlin
+serverSocketDrawView = findViewById<ServerSocketDrawView>(R.id.draw_view)
+serverSocketDrawView.getIPAddress()
+serverSocketDrawView.onClosedListener
 ```
 
 LIMITATIONS
