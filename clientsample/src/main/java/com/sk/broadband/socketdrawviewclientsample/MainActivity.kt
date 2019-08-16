@@ -42,8 +42,19 @@ class MainActivity : AppCompatActivity() {
         blueBar = findViewById(R.id.blue_bar)
         widthBar = findViewById(R.id.width_bar)
 
-        cancelButton.setOnClickListener { clientSocketDrawView.undoPrev() }
-        eraseButton.setOnClickListener { clientSocketDrawView.eraseAll() }
+        clientSocketDrawView.onClosedListener = {
+            Toast.makeText(this, "Socket is closed", Toast.LENGTH_LONG)?.show()
+            finish()
+        }
+
+        cancelButton.setOnClickListener {
+            clientSocketDrawView.undoPrev()
+            clientSocketDrawView.undoPrevServer()
+        }
+        eraseButton.setOnClickListener {
+            clientSocketDrawView.eraseAll()
+            clientSocketDrawView.eraseAllServer()
+        }
         modeButton.setOnClickListener {
             clientSocketDrawView.isPath = !clientSocketDrawView.isPath
         }

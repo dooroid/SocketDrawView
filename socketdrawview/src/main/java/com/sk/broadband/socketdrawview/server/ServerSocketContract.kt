@@ -5,10 +5,12 @@ import com.sk.broadband.socketdrawview.DrawContract
 interface ServerSocketContract {
     interface View : DrawContract.View {
 
-        fun createServerSocket(port: Int)
+        var onClosedListener: (()->Unit)?
+
+        fun createServerSocket(port: Int = 3000)
 
         fun disconnectServer()
 
-        fun readBuffer()
+        fun getIPAddress(): String
     }
 }

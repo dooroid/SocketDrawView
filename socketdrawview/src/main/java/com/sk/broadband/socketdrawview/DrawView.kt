@@ -75,20 +75,24 @@ open class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs
         val curX = coordinateX(event.x)
         val curY = coordinateY(event.y)
 
+        draw(DrawContract.View.TouchInfo(curX, curY, event.action))
+    }
+
+    open fun draw(touchInfo: DrawContract.View.TouchInfo) {
         if (!isPath) {
-            updateCoordinates(curX, curY)
+            updateCoordinates(touchInfo.x, touchInfo.y)
             invalidate()
             return
         }
 
-        when (event.action) {
+        when (touchInfo.action) {
             MotionEvent.ACTION_DOWN -> {
-                startDraw(curX, curY)
+                startDraw(touchInfo.x, touchInfo.y)
                 invalidate()
             }
             MotionEvent.ACTION_MOVE -> {
-                if (isTolerant(curX, curY)) {
-                    recordDraw(curX, curY)
+                if (isTolerant(touchInfo.x, touchInfo.y)) {
+                    recordDraw(touchInfo.x, touchInfo.y)
                     invalidate()
                 }
             }

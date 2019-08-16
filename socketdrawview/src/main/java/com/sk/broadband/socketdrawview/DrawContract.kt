@@ -5,6 +5,9 @@ import android.view.MotionEvent
 interface DrawContract {
 
     interface View {
+
+        data class TouchInfo(var x: Float, var y: Float, var action: Int)
+
         var pathColor: Int
 
         var pathStrokeWidth: Float
