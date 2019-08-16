@@ -16,10 +16,13 @@ import java.net.Socket
 class ServerSocketDrawView(context: Context, attrs: AttributeSet) : DrawView(context, attrs),
     ServerSocketContract.View {
 
-    lateinit var socket: Socket
+    var socket: Socket = Socket()
     lateinit var serverSocket: ServerSocket
 
     var port: Int = 3000
+
+    override var onClosedListener: (() -> Unit)? = null
+
 
     override fun createServerSocket(port: Int) {
         this.port = port
@@ -72,6 +75,14 @@ class ServerSocketDrawView(context: Context, attrs: AttributeSet) : DrawView(con
                 eraseAll()
                 return
             }
+            9 -> {
+                CoroutineScope(Dispatchers.Main).launch {
+                    acceptSocket()
+                    while (socket.isConnected) {
+                        reflectOnScreen(readBuffer())
+                    }
+                }
+            }
         }
 
         draw(transfromRawData(data))
@@ -99,18 +110,23 @@ class ServerSocketDrawView(context: Context, attrs: AttributeSet) : DrawView(con
     private fun recoordinateX(curX: Int): Float {
         val location = IntArray(2)
         getLocationInWindow(location)
-        return ((curX.toFloat() / 100000) * location[0]) - location[0]
+        return ((curX.toFloat() / 100000) * width) - location[0]
     }
 
     private fun recoordinateY(curY: Int): Float {
         val location = IntArray(2)
         getLocationInWindow(location)
-        return ((curY.toFloat() / 100000) * location[1]) - location[1]
+        return ((curY.toFloat() / 100000) * height) - location[1]
     }
 
     override fun disconnectServer() {
-        socket.close()
-        serverSocket.close()
+        onClosedListener?.invoke()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.Default).async {
+                socket.close()
+            }.await()
+        }
     }
 
     override fun getIPAddress(): String {
