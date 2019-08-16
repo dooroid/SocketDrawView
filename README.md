@@ -12,7 +12,7 @@ SocketDrawView
 
 This is an Android project allowing to use Socket, DrawView in the simplest way possible.
 
-<img src="https://gph.is/g/Z2V1ql5" alt="sample" title="sample" align="center" />
+<img src="https://media.giphy.com/media/RJJL2I5lTmmYBwuNfM/giphy.gif" alt="sample" title="sample" align="center" />
 
 USAGE
 -----
@@ -150,11 +150,11 @@ LIMITATIONS
 LINK
 -----
 
-**Stack OverFlow:**
+**Github:**
 
 I realized this project using this post:
-* [Create circular image view in android](http://stackoverflow.com/a/16208548/1832221)
-* [How to add a shadow and a border on circular imageView android?](http://stackoverflow.com/q/17655264/1832221)
+* [refer to CircularImageView](https://github.com/lopspower/CircularImageView)
+* [refer to FingerPaintView](https://github.com/PicnicSupermarket/FingerPaintView)
 
 
 LICENCE
