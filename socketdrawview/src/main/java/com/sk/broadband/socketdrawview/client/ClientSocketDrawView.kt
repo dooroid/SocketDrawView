@@ -23,6 +23,13 @@ class ClientSocketDrawView(context: Context, attrs: AttributeSet) : DrawView(con
     private lateinit var ipAddress: String
     private var port: Int = 3000
 
+    override var onClosedListener: (()->Unit)? = null
+    override var onIOExceptionListener: (()->Unit)? = null
+    override var onSocketTimeoutExceptionListener: (()->Unit)? = null
+    override var onIllegalBlockingModeExceptionListener: (()->Unit)? = null
+    override var onIllegalArgumentExceptionListener: (()->Unit)? = null
+
+
     override fun connectSocket(ip: String, port: Int) {
         ipAddress = ip
         this.port = port
@@ -32,17 +39,25 @@ class ClientSocketDrawView(context: Context, attrs: AttributeSet) : DrawView(con
                 socket.connect(InetSocketAddress(ip, port))
             } catch (e: IOException) {
                 Log.d("ERROR", "IOException")
+                onIOExceptionListener?.invoke()
             } catch (e: SocketTimeoutException) {
                 Log.d("ERROR", "SocketTimeoutException")
+                onSocketTimeoutExceptionListener?.invoke()
             } catch (e: IllegalBlockingModeException) {
                 Log.d("ERROR", "IllegalBlockingModeException")
+                onIllegalBlockingModeExceptionListener?.invoke()
             } catch (e: IllegalArgumentException){
                 Log.d("ERROR", "IllegalArgumentExcept")
+                onIllegalArgumentExceptionListener?.invoke()
             }
         }
     }
 
     override fun disconnectClient() {
+        val data = ByteArray(21)
+        data[0] = 9
+        sendServer(data)
+
         GlobalScope.launch(Dispatchers.Default) {
             socket.close()
         }
@@ -65,14 +80,14 @@ class ClientSocketDrawView(context: Context, attrs: AttributeSet) : DrawView(con
     }
 
     private fun sendServer(data: ByteArray) {
-        if (!socket.isConnected) {
-            Log.d("ERROR", "Socket is not Connected")
-            return
-        }
-
         GlobalScope.launch(Dispatchers.Default) {
-            val outputStream = socket.getOutputStream()
-            outputStream.write(data)
+            if (!socket.isConnected || socket.isClosed) {
+                Log.d("ERROR", "Socket is not Connected")
+                onClosedListener?.invoke()
+            } else {
+                val outputStream = socket.getOutputStream()
+                outputStream.write(data)
+            }
         }
     }
 
@@ -105,12 +120,12 @@ class ClientSocketDrawView(context: Context, attrs: AttributeSet) : DrawView(con
     fun recoordinateX(curX: Float): Int {
         val location = IntArray(2)
         getLocationInWindow(location)
-        return (((curX - location[0].toFloat())/ location[0].toFloat()) * 100000).toInt()
+        return (((curX - location[0].toFloat()) / width) * 100000).toInt()
     }
 
     fun recoordinateY(curY: Float): Int {
         val location = IntArray(2)
         getLocationInWindow(location)
-        return (((curY - location[1].toFloat())/ location[1].toFloat()) * 100000).toInt()
+        return (((curY - location[1].toFloat()) / height) * 100000).toInt()
     }
 }

@@ -42,6 +42,11 @@ class MainActivity : AppCompatActivity() {
         blueBar = findViewById(R.id.blue_bar)
         widthBar = findViewById(R.id.width_bar)
 
+        clientSocketDrawView.onClosedListener = {
+            Toast.makeText(this, "Socket is closed", Toast.LENGTH_LONG)?.show()
+            finish()
+        }
+
         cancelButton.setOnClickListener {
             clientSocketDrawView.undoPrev()
             clientSocketDrawView.undoPrevServer()
