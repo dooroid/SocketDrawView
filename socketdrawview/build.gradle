@@ -4,6 +4,37 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+ext {
+
+    bintrayRepo = "SKBroadband"
+    bintrayName = "SocketDrawView"
+
+    libraryName = "socketdrawview"
+
+    publishedGroupId = 'com.sk.broadband'
+    artifact = 'socketdrawview'
+    libraryVersion = '1.0.0'
+
+    libraryDescription = 'Socket draw view for Android'
+
+    siteUrl = 'https://github.com/skb-duhui/SocketDrawView'
+    gitUrl = 'https://github.com/skb-duhui/SocketDrawView.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'skb-duhui'
+    developerName = 'Rim Duhui'
+    developerEmail = 'duhui@sk.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+
 android {
     compileSdkVersion 28
     buildToolsVersion "29.0.1"
@@ -43,4 +74,32 @@ dependencies {
     testImplementation "org.mockito:mockito-inline:2.+"
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = "SimpleDrawView"
+        name = "simpledrawview"
+        websiteUrl = 'https://github.com/skb-duhui/SimpleDrawView'
+        vcsUrl = 'https://github.com/skb-duhui/SimpleDrawView.git'
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}
+
+if (project.rootProject.file('local.properties').exists()) {
+    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 }
